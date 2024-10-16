@@ -134,9 +134,11 @@ function calculate() {
     // Hide the names section and show the result section
     document.getElementById('names-section').style.display = 'none';
     document.getElementById('result-section').style.display = 'block';
+
+    // Show the print and download buttons
+    document.querySelector('button[onclick="printSchedule()"]').style.display = 'inline-block';
+    document.querySelector('button[onclick="downloadPDF()"]').style.display = 'inline-block';
 }
-
-
 
 function printSchedule() {
     window.print();

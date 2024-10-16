@@ -2,89 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quran Reading Planner</title>
-    <style>
-        /* CSS styles */
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-        input {
-            padding: 5px;
-            margin-right: 10px;
-        }
-        button {
-            padding: 5px 10px;
-            margin-top: 10px;
-        }
-        #name-fields label {
-            display: block;
-            margin-top: 5px;
-        }
-        #result {
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-            color: #777;
-        }
-        @media print {
-            button {
-                display: none;
-            }
-        }
-    </style>
+    
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Include Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+    
+    <!-- Include Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <!-- Include Animate CSS for Animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- Include Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Quran Reading Planner</h1>
-    <div id="input-section">
-        <label>
-            Number of Participants (X):
-            <input type="number" id="participants" min="1" required>
-        </label>
-        <label>
-            Target Days for Completion (Y):
-            <input type="number" id="days" min="1" required>
-        </label>
-        <button onclick="generateNameFields()">Next</button>
-    </div>
+    <!-- Hero Section -->
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">Quran Reading Planner</h1>
+            <p class="lead text-muted">Plan your group reading of the Quran with ease. Set the number of participants and days, and receive a personalized schedule to complete the reading.</p>
+        </div>
+    </section>
 
-    <div id="names-section" style="display:none;">
-        <h2>Enter Participant Names</h2>
-        <div id="name-fields"></div>
-        <label>
-            Table Title:
-            <input type="text" id="table-title" placeholder="Enter a title for the table">
-        </label>
-        <button onclick="calculate()">Calculate</button>
-    </div>
+    <!-- Main Container -->
+    <div class="container-fluid mt-5">
+        <div class="card p-4 w-100">
+            <div id="input-section">
+                <div class="form-group">
+                    <label for="participants">Number of Participants (X):</label>
+                    <input type="number" id="participants" min="1" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="days">Target Days for Completion (Y):</label>
+                    <input type="number" id="days" min="1" class="form-control" required>
+                </div>
+                <button class="btn btn-primary" onclick="generateNameFields()">
+                    <i class="fas fa-user-plus"></i> Next
+                </button>
+            </div>
 
-    <div id="result-section" style="display:none;">
-        <h2 id="custom-title">Reading Schedule</h2>
-        <p id="time-frame"></p>
-        <div id="result"></div>
-        <button onclick="printSchedule()">Print</button>
-        <button onclick="downloadPDF()">Download as PDF</button>
+            <div id="names-section" class="mt-4" style="display:none;">
+                <h2>Enter Participant Names</h2>
+                <div id="name-fields" class="mb-3"></div>
+                <div class="form-group">
+                    <label for="table-title">Table Title:</label>
+                    <input type="text" id="table-title" class="form-control" placeholder="Enter a title for the table">
+                </div>
+                <button class="btn btn-primary" onclick="calculate()">
+                    <i class="fas fa-calculator"></i> Calculate
+                </button>
+            </div>
+
+            <div id="result-section" class="container mt-5" style="display:none; max-width: 100%; text-align: center;">
+                <h2 id="custom-title">Reading Schedule</h2>
+                <p id="time-frame"></p>
+                <div id="result" class="d-flex justify-content-center">
+                    <table class="table table-bordered table-striped w-100">
+                        <!-- The table content will be dynamically generated -->
+                    </table>
+                </div>
+                <button class="btn btn-primary mt-3" onclick="printSchedule()" style="display:none;">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-primary mt-3" onclick="downloadPDF()" style="display:none;">
+                    <i class="fas fa-file-pdf"></i> Download as PDF
+                </button>
+            </div>
+
+            <!-- Loader Spinner -->
+            <div id="loader" class="spinner-border text-primary mt-4" role="status" style="display:none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
     </div>
 
     <!-- Include the script tag for JavaScript -->
@@ -92,8 +86,13 @@
     <!-- Include jsPDF and AutoTable -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; mkante.ml | Follow us on 
+            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a> 
+            <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
+        </p>
+    </footer>
 </body>
-<footer>
-    <p>&copy; mkante.ml</p>
-</footer>
 </html>
