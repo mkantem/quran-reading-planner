@@ -19,13 +19,20 @@
     
     <!-- Include Custom CSS -->
     <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
+    <!-- Language Switcher -->
+    <div class="language-switcher text-center mt-3">
+        <button onclick="setLanguage('en')" class="btn btn-secondary">English</button>
+        <button onclick="setLanguage('fr')" class="btn btn-secondary">Français</button>
+    </div>
+
     <!-- Hero Section -->
     <section class="jumbotron text-center">
         <div class="container">
-            <h1 class="jumbotron-heading">Quran Reading Planner</h1>
-            <p class="lead text-muted">Plan your group reading of the Quran with ease. Set the number of participants and days, and receive a personalized schedule to complete the reading.</p>
+            <h1 id="title" class="jumbotron-heading">Quran Reading Planner</h1>
+            <p id="subtitle" class="lead text-muted">Plan your group reading of the Quran with ease. Set the number of participants and days, and receive a personalized schedule to complete the reading.</p>
         </div>
     </section>
 
@@ -34,43 +41,46 @@
         <div class="card p-4 w-100">
             <div id="input-section">
                 <div class="form-group">
-                    <label for="participants">Number of Participants (X):</label>
+                    <label id="participants-label" for="participants">Number of participants (X):</label>
                     <input type="number" id="participants" min="1" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="days">Target Days for Completion (Y):</label>
+                    <label id="days-label" for="days">Target days for completion (Y):</label>
                     <input type="number" id="days" min="1" class="form-control" required>
                 </div>
-                <button class="btn btn-primary" onclick="generateNameFields()">
+                <button id="next-button" class="btn btn-primary" onclick="generateNameFields()">
                     <i class="fas fa-user-plus"></i> Next
                 </button>
             </div>
 
             <div id="names-section" class="mt-4" style="display:none;">
-                <h2>Enter Participant Names</h2>
+                <h2 id="enter-names">Enter participant names</h2>
                 <div id="name-fields" class="mb-3"></div>
                 <div class="form-group">
-                    <label for="table-title">Table Title:</label>
+                    <label id="table-title-label" for="table-title">Table title:</label>
                     <input type="text" id="table-title" class="form-control" placeholder="Enter a title for the table">
                 </div>
-                <button class="btn btn-primary" onclick="calculate()">
+                <button id="calculate-button" class="btn btn-primary" onclick="calculate()">
                     <i class="fas fa-calculator"></i> Calculate
                 </button>
             </div>
 
             <div id="result-section" class="container mt-5" style="display:none; max-width: 100%; text-align: center;">
-                <h2 id="custom-title">Reading Schedule</h2>
-                <p id="time-frame"></p>
+                <h2 id="custom-title">Reading schedule</h2> 
+                <p id="time-frame"></p> 
                 <div id="result" class="d-flex justify-content-center">
-                    <table class="table table-bordered table-striped w-100">
+                    <table class="table table-bordered table-striped w-100" style="max-width: fit-content;">
                         <!-- The table content will be dynamically generated -->
                     </table>
                 </div>
-                <button class="btn btn-primary mt-3" onclick="printSchedule()" style="display:none;">
+                <button id="print-button" class="btn btn-primary mt-3" onclick="printSchedule()" style="display:none;">
                     <i class="fas fa-print"></i> Print
                 </button>
-                <button class="btn btn-primary mt-3" onclick="downloadPDF()" style="display:none;">
+                <button id="download-button" class="btn btn-primary mt-3" onclick="downloadPDF()" style="display:none;">
                     <i class="fas fa-file-pdf"></i> Download as PDF
+                </button>
+                <button id="home-button" class="btn btn-secondary mt-3" onclick="goHome()">
+                    <i class="fas fa-home"></i> Home
                 </button>
             </div>
 
@@ -82,16 +92,82 @@
     </div>
 
     <!-- Include the script tag for JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="script.js"></script>
     <!-- Include jsPDF and AutoTable -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 
+    <!-- Language Switcher Script -->
+    <script>
+        const translations = {
+    en: {
+        title: "Quran reading planner",
+        subtitle: "Plan your group reading of the Quran with ease. Set the number of participants and days, and receive a personalized schedule to complete the reading.",
+        participants: "Number of participants (X):",
+        targetDays: "Target days for completion (Y):",
+        nextButton: "Next",
+        enterNames: "Enter participant names",
+        tableTitle: "Table title:",
+        calculateButton: "Calculate",
+        readingSchedule: "Reading schedule",
+        fromTo: "From {startDate} to {endDate} ({days} days)",
+        totalPages: "Total pages",  
+        assignedPages: "Assigned pages",  
+        pagesPerDay: "Pages per Day",  
+        participantName: "Participant name",
+        printButton: "Print",
+        downloadButton: "Download as PDF"
+    },
+    fr: {
+        title: "Planificateur de lecture du Coran",
+        subtitle: "Planifiez votre lecture de groupe du Coran facilement. Définissez le nombre de participants et les jours, et recevez un calendrier personnalisé pour terminer la lecture.",
+        participants: "Nombre de participants (X):",
+        targetDays: "Nombre de jours pour terminer (Y):",
+        nextButton: "Suivant",
+        enterNames: "Entrez les noms des participants",
+        tableTitle: "Titre du tableau:",
+        calculateButton: "Calculer",
+        readingSchedule: "Calendrier de lecture",
+        fromTo: "Du {startDate} au {endDate} ({days} jours)",
+        totalPages: "Nombre total de pages",  // Added this key
+        assignedPages: "Pages assignées",  // Added this key
+        pagesPerDay: "Pages par jour",  // Added this key
+        participantName: "Nom du participant",
+        printButton: "Imprimer",
+        downloadButton: "Télécharger en PDF"
+    }
+};
+
+
+        function setLanguage(lang) {
+    document.documentElement.lang = lang;
+    document.getElementById('title').textContent = translations[lang].title;
+    document.getElementById('subtitle').textContent = translations[lang].subtitle;
+    document.getElementById('participants-label').textContent = translations[lang].participants;
+    document.getElementById('days-label').textContent = translations[lang].targetDays;
+    document.getElementById('next-button').textContent = translations[lang].nextButton;
+    document.getElementById('enter-names').textContent = translations[lang].enterNames;
+    document.getElementById('table-title-label').textContent = translations[lang].tableTitle;
+    document.getElementById('calculate-button').textContent = translations[lang].calculateButton;
+    document.getElementById('reading-schedule-title').textContent = translations[lang].readingSchedule;
+
+    // Update dynamic text for from-to date range
+    const startDate = new Date().toLocaleDateString(lang);
+    const endDate = new Date(new Date().setDate(new Date().getDate() + parseInt(document.getElementById('days').value))).toLocaleDateString(lang);
+    document.getElementById('time-frame').textContent = translations[lang].fromTo.replace('{startDate}', startDate).replace('{endDate}', endDate).replace('{days}', document.getElementById('days').value);
+
+    document.getElementById('print-button').textContent = translations[lang].printButton;
+    document.getElementById('download-button').textContent = translations[lang].downloadButton;
+}
+
+    </script>
+
     <!-- Footer -->
     <footer>
-        <p>&copy; mkante.ml | Follow us on 
-            <a href="#" class="text-light"><i class="fab fa-twitter"></i></a> 
-            <a href="#" class="text-light"><i class="fab fa-facebook"></i></a>
+        <p>&copy; <a href="https://mkante.ml">mkante.ml</a>
+            <a href="https://x.com/mkantem" class="text-light"><i class="fab fa-twitter"></i></a> 
+            <a href="https://facebook.com/mkantemZ" class="text-light"><i class="fab fa-facebook"></i></a>
         </p>
     </footer>
 </body>
