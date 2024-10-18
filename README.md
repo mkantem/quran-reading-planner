@@ -1,16 +1,16 @@
 # [Version française](#planificateur-de-lecture-du-coran) | [English version](#quran-reading-planner)
 
-### Planificateur de lecture du Coran
+## Planificateur de lecture du Coran
 
 Le planificateur de lecture du Coran est un outil simple qui permet à un groupe de participants de se répartir les 604 pages du Coran de manière équitable, en fonction du nombre de jours prévu pour terminer la lecture.
 
-### Fonctionnalités :
+## Fonctionnalités :
 
 - **Répartition des pages** : entrez le nombre de participants et le nombre de jours pour obtenir un planning de lecture répartissant les pages de manière équitable entre les participants.
 - **Changer la langue** : un commutateur de langue est disponible, permettant de basculer entre la version anglaise et française de l'interface.
 - **Génération de calendrier** : le calendrier de lecture généré peut être imprimé ou téléchargé en format PDF.
 
-### Contribution :
+## Contribution :
 
 Si vous êtes développeur ou simplement intéressé par ce projet, n'hésitez pas à proposer des modifications, émettre des suggestions ou signaler des problèmes.
 
